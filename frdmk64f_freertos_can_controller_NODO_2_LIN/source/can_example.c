@@ -323,7 +323,7 @@ static void task_100ms(void *pvParameters)
     	FLEXCAN_TransferSendNonBlocking(EXAMPLE_CAN, &flexcanHandle, &tx100Xfer);
 
      	tx100Frame.dataByte0 = (g_Adc16ConversionReturnValue & 0xFF);
-    	tx100Frame.dataByte0 = (g_Adc16ConversionReturnValue >> 8);
+    	tx100Frame.dataByte1 = (g_Adc16ConversionReturnValue >> 8);
 
 
         // Wait for the next cycle.

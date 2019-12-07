@@ -423,11 +423,10 @@ static void task_rx(void *pvParameters)
             	rx1Xfer.mbIdx = RX1_MESSAGE_BUFFER_NUM;
         		FLEXCAN_TransferReceiveNonBlocking(EXAMPLE_CAN, &flexcanHandle, &rx1Xfer);
     			rxFrame = &rx1Frame;
-////    			if((rx1Frame.dataByte0 & 0x02) == 2) {PRINTF("LED ON\r\n"); LED_BLUE_ON();}  //nodo2
-////    			else {PRINTF("LED OFF\r\n"); LED_BLUE_OFF();}  //nodO2
-//    			vTaskDelay(10);
-    			if((rx1Frame.dataByte0 & 0x04) == 4) {PRINTF("LED ON\r\n"); LED_BLUE_ON();}  //nodo2
+    			if((rx1Frame.dataByte0 & 0x02) == 2) {PRINTF("LED ON\r\n"); LED_BLUE_ON();}  //nodo2
     			else {PRINTF("LED OFF\r\n"); LED_BLUE_OFF();}  //nodO2
+//    			if((rx1Frame.dataByte0 & 0x04) == 4) {PRINTF("LED ON\r\n"); LED_BLUE_ON();}  //nodo2
+//    			else {PRINTF("LED OFF\r\n"); LED_BLUE_OFF();}  //nodO2
     			break;
     		case RX2_MESSAGE_BUFFER_NUM:
     			/* Start the reception over */

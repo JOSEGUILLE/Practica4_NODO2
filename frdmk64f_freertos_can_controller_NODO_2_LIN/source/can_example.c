@@ -40,8 +40,13 @@
 #include "fsl_flexcan.h"
 #include "board.h"
 
+#include "fsl_uart_freertos.h"
+#include "fsl_uart.h"
+
 #include "pin_mux.h"
 #include "clock_config.h"
+#include "lin1d3_driver.h"
+#include "FreeRTOSConfig.h"
 #include "fsl_adc16.h"
 /*******************************************************************************
  * Definitions
@@ -51,6 +56,8 @@
 #define OS_TICK_PERIOD_50MS 50
 /* Task priorities. */
 #define hello_task_PRIORITY (configMAX_PRIORITIES - 1)
+#define test_task_heap_size_d	(192)
+
 /* CAN defines */
 #define EXAMPLE_CAN CAN0
 #define EXAMPLE_CAN_CLKSRC kCLOCK_BusClk
@@ -61,6 +68,21 @@
 #define TX100_MESSAGE_BUFFER_NUM (8)
 #define TX50_MESSAGE_BUFFER_NUM (7)
 
+#define xJUST_MASTER
+
+/* UART instance and clock */
+#define MASTER_UART UART3
+#define MASTER_UART_CLKSRC UART3_CLK_SRC
+#define MASTER_UART_CLK_FREQ CLOCK_GetFreq(UART3_CLK_SRC)
+#define MASTER_UART_RX_TX_IRQn UART3_RX_TX_IRQn
+
+/* UART instance and clock */
+#define SLAVE_UART UART4
+#define SLAVE_UART_CLKSRC UART4_CLK_SRC
+#define SLAVE_UART_CLK_FREQ CLOCK_GetFreq(UART4_CLK_SRC)
+#define SLAVE_UART_RX_TX_IRQn UART4_RX_TX_IRQn
+
+/*ADC configuration */
 #define DEMO_ADC16_BASE (ADC0)
 #define DEMO_ADC16_CHANNEL_GROUP (0U)
 #define DEMO_ADC16_USER_CHANNEL (12U)
@@ -83,6 +105,15 @@ void ADC_init(void);
 static void task_100ms(void *pvParameters);
 static void task_50ms(void *pvParameters);
 static void task_rx(void *pvParameters);
+
+static void test_task(void *pvParameters);
+
+static void	message_1_callback_master(void* message);
+static void	message_2_callback_master(void* message);
+static void	message_3_callback_master(void* message);
+static void	message_1_callback_slave(void* message);
+static void	message_2_callback_slave(void* message);
+static void	message_3_callback_slave(void* message);
 
 /*******************************************************************************
  * Variables

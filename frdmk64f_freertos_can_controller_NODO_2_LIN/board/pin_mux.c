@@ -27,7 +27,9 @@ void BOARD_InitBootPins(void) {
    // BOARD_InitPins();
 }
 #define PIN2_IDX                         2u   /*!< Pin number for pin 2 in a port */
-#define PIN16_IDX                        16u   /*!< Pin number for pin 3 in a port */
+#define PIN14_IDX                       14u   /*!< Pin number for pin 14 in a port */
+#define PIN15_IDX                       15u   /*!< Pin number for pin 15 in a port */
+#define PIN16_IDX                       16u   /*!< Pin number for pin 3 in a port */
 #define PIN17_IDX                       17u   /*!< Pin number for pin 4 in a port */
 #define PIN18_IDX                       18u   /*!< Pin number for pin 18 in a port */
 #define PIN19_IDX                       19u   /*!< Pin number for pin 19 in a port */
@@ -68,6 +70,13 @@ void BOARD_InitPins(void) {
     (~(SIM_SOPT5_UART0TXSRC_MASK)))                          /* Mask bits to zero which are setting */
       | SIM_SOPT5_UART0TXSRC(SOPT5_UART0TXSRC_UART_TX)       /* UART 0 transmit data source select: UART0_TX pin */
     );
+
+  /*UART 3 pins config*/
+  PORT_SetPinMux(PORTC, PIN16_IDX, kPORT_MuxAlt3);           /* PORTB14 (pin 90) is configured as UART3_RX */
+  PORT_SetPinMux(PORTC, PIN17_IDX, kPORT_MuxAlt3);           /* PORTB15 (pin 91) is configured as UART3_TX */
+  /*UART 4 pins config*/
+  PORT_SetPinMux(PORTC, PIN14_IDX, kPORT_MuxAlt3);           /* PORTB16 (pin 86) is configured as UART4_RX */
+  PORT_SetPinMux(PORTC, PIN15_IDX, kPORT_MuxAlt3);           /* PORTB17 (pin 87) is configured as UART4_TX */
 }
 
 /*******************************************************************************

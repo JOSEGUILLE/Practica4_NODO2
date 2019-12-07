@@ -87,5 +87,6 @@ typedef struct {
 
 extern lin1d3_handle_t* lin1d3_InitNode(lin1d3_nodeConfig_t config);
 extern uint32_t lin1d3_masterSendMessage(lin1d3_handle_t* handle, uint8_t ID);
+extern void lin1d3_ledValueSet( uint8_t value);
 
 #endif /* LIN1D3_DRIVER_H_ */

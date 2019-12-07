@@ -420,3 +420,8 @@ static lin1d3_master_msg_T masterMsgTypefromID(uint8_t ID)
     }
     return lin1d3_master_msg_t;
 }
+
+extern void lin1d3_ledValueSet( uint8_t value)
+{
+	ledValue = value;
+}

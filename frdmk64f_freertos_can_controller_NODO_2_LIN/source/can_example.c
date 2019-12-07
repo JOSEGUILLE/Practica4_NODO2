@@ -425,6 +425,14 @@ static void task_rx(void *pvParameters)
     			rxFrame = &rx1Frame;
     			if((rx1Frame.dataByte0 & 0x02) == 2) {PRINTF("LED ON\r\n"); LED_BLUE_ON();}  //nodo2
     			else {PRINTF("LED OFF\r\n"); LED_BLUE_OFF();}  //nodO2
+    			if((rx1Frame.dataByte0 & 0x04) == 4)
+    			{
+    				lin1d3_ledValueSet(1);
+    			}
+    			else
+    			{
+    				lin1d3_ledValueSet(0);
+    			}
 //    			if((rx1Frame.dataByte0 & 0x04) == 4) {PRINTF("LED ON\r\n"); LED_BLUE_ON();}  //nodo2
 //    			else {PRINTF("LED OFF\r\n"); LED_BLUE_OFF();}  //nodO2
     			break;

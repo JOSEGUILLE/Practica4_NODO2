@@ -146,8 +146,9 @@ volatile uint32_t g_Adc16ConversionValue;
 volatile uint32_t g_Adc16ConversionReturnValue;
 static adc16_channel_config_t adc16ChannelConfigStruct;
 
-//static uint32_t g_Adc16ConversionReturnValue_old;
-//static uint8_t period1_old;             // nodo2,3
+static uint32_t g_Adc16ConversionValue_old;
+static uint32_t g_Adc16ConversionReturnValue_old;
+static uint8_t period1_old;             // nodo2,3
 
 
 /*******************************************************************************
@@ -325,10 +326,18 @@ static void task_100ms(void *pvParameters)
     	tx100Xfer.mbIdx = TX100_MESSAGE_BUFFER_NUM;
     	FLEXCAN_TransferSendNonBlocking(EXAMPLE_CAN, &flexcanHandle, &tx100Xfer);
 
-     	tx100Frame.dataByte0 = (g_Adc16ConversionReturnValue & 0xFF);
+     	if ( period3 != 0)
+     	{
+        g_Adc16ConversionReturnValue_old = g_Adc16ConversionReturnValue;
+    	tx100Frame.dataByte0 = (g_Adc16ConversionReturnValue & 0xFF);
     	tx100Frame.dataByte1 = (g_Adc16ConversionReturnValue >> 8);
 
-
+     	}
+     	else if (period3 == 0)
+     	{
+        	tx100Frame.dataByte0 = (g_Adc16ConversionReturnValue_old & 0xFF);
+        	tx100Frame.dataByte1 = (g_Adc16ConversionReturnValue_old >> 8);    		g_Adc16ConversionReturnValue_old;
+     	}
         // Wait for the next cycle.
         vTaskDelayUntil(  &xLastWakeTime, (xFrequency*period3)/portTICK_PERIOD_MS);  //nodo1
         //adc1 += 100;   //nodo3
@@ -360,8 +369,18 @@ static void task_50ms(void *pvParameters)
     	tx50Xfer.mbIdx = TX50_MESSAGE_BUFFER_NUM;
     	FLEXCAN_TransferSendNonBlocking(EXAMPLE_CAN, &flexcanHandle, &tx50Xfer);
 
+     	if ( period3 != 0)
+     	{
+     	g_Adc16ConversionValue_old = g_Adc16ConversionValue;
     	tx50Frame.dataByte0 = (g_Adc16ConversionValue)&0xFF; //nodo2
     	tx50Frame.dataByte1 = (g_Adc16ConversionValue&0xFF00)>>8;;  // nodo2
+     	}
+     	else if (period3 == 0)
+     	{
+        	tx100Frame.dataByte0 = (g_Adc16ConversionValue_old & 0xFF);
+        	tx100Frame.dataByte1 = (g_Adc16ConversionValue_old >> 8);    		g_Adc16ConversionReturnValue_old;
+     	}
+
 
     	//tx50Frame.dataByte0 = 50;
     	//tx50Frame.dataByte1++;

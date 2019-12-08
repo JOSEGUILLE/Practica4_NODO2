@@ -137,7 +137,8 @@ uint32_t rx1Identifier = 0x010;  // nodo 2,3
 uint32_t rx2Identifier = 0x011;  // nodo 2,3
 
 uint16_t adc1 = 0;               // nodo3
-uint8_t period1 = 10;             // nodo2,3
+uint8_t period2 = 10;           // nodo2
+uint8_t period3 = 10;           // nodo 3
 
 // ADC
 volatile bool g_Adc16ConversionDoneFlag = false;
@@ -145,6 +146,8 @@ volatile uint32_t g_Adc16ConversionValue;
 volatile uint32_t g_Adc16ConversionReturnValue;
 static adc16_channel_config_t adc16ChannelConfigStruct;
 
+//static uint32_t g_Adc16ConversionReturnValue_old;
+//static uint8_t period1_old;             // nodo2,3
 
 
 /*******************************************************************************
@@ -327,7 +330,7 @@ static void task_100ms(void *pvParameters)
 
 
         // Wait for the next cycle.
-        vTaskDelayUntil(  &xLastWakeTime, (xFrequency*period1)/portTICK_PERIOD_MS);  //nodo1
+        vTaskDelayUntil(  &xLastWakeTime, (xFrequency*period3)/portTICK_PERIOD_MS);  //nodo1
         //adc1 += 100;   //nodo3
     }
 }
@@ -372,7 +375,7 @@ static void task_50ms(void *pvParameters)
     	}
 
         // Wait for the next cycle.
-        vTaskDelayUntil( &xLastWakeTime, (xFrequency*period1)/portTICK_PERIOD_MS);
+        vTaskDelayUntil( &xLastWakeTime, (xFrequency*period2)/portTICK_PERIOD_MS);
     }
 }
 
@@ -442,7 +445,8 @@ static void task_rx(void *pvParameters)
             	rx2Xfer.mbIdx = RX2_MESSAGE_BUFFER_NUM;
         		FLEXCAN_TransferReceiveNonBlocking(EXAMPLE_CAN, &flexcanHandle, &rx2Xfer);
     			rxFrame = &rx2Frame;
-    			period1 = rx2Frame.dataByte0;
+    			period2 = rx2Frame.dataByte1;
+    			period3 = rx2Frame.dataByte2;
     			break;
     		default:
     			break;

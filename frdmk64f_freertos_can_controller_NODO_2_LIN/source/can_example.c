@@ -148,7 +148,6 @@ static adc16_channel_config_t adc16ChannelConfigStruct;
 
 static uint32_t g_Adc16ConversionValue_old;
 static uint32_t g_Adc16ConversionReturnValue_old;
-static uint8_t period1_old;             // nodo2,3
 
 
 /*******************************************************************************
@@ -333,14 +332,20 @@ static void task_100ms(void *pvParameters)
     	tx100Frame.dataByte1 = (g_Adc16ConversionReturnValue >> 8);
 
      	}
-     	else if (period3 == 0)
+     	else
      	{
         	tx100Frame.dataByte0 = (g_Adc16ConversionReturnValue_old & 0xFF);
         	tx100Frame.dataByte1 = (g_Adc16ConversionReturnValue_old >> 8);    		g_Adc16ConversionReturnValue_old;
      	}
+     	if ( period3 != 0)
+     	{
         // Wait for the next cycle.
-        vTaskDelayUntil(  &xLastWakeTime, (xFrequency*period3)/portTICK_PERIOD_MS);  //nodo1
-        //adc1 += 100;   //nodo3
+     		vTaskDelayUntil(  &xLastWakeTime, (xFrequency*period3)/portTICK_PERIOD_MS);  //nodo1
+     	}
+     	else
+     	{
+     		vTaskDelayUntil(  &xLastWakeTime, (xFrequency)/portTICK_PERIOD_MS);  //nodo1
+     	}
     }
 }
 
@@ -369,13 +374,13 @@ static void task_50ms(void *pvParameters)
     	tx50Xfer.mbIdx = TX50_MESSAGE_BUFFER_NUM;
     	FLEXCAN_TransferSendNonBlocking(EXAMPLE_CAN, &flexcanHandle, &tx50Xfer);
 
-     	if ( period3 != 0)
+     	if ( period2 != 0)
      	{
-     	g_Adc16ConversionValue_old = g_Adc16ConversionValue;
-    	tx50Frame.dataByte0 = (g_Adc16ConversionValue)&0xFF; //nodo2
-    	tx50Frame.dataByte1 = (g_Adc16ConversionValue&0xFF00)>>8;;  // nodo2
+			g_Adc16ConversionValue_old = g_Adc16ConversionValue;
+			tx50Frame.dataByte0 = (g_Adc16ConversionValue)&0xFF; //nodo2
+			tx50Frame.dataByte1 = (g_Adc16ConversionValue&0xFF00)>>8;;  // nodo2
      	}
-     	else if (period3 == 0)
+     	else
      	{
         	tx100Frame.dataByte0 = (g_Adc16ConversionValue_old & 0xFF);
         	tx100Frame.dataByte1 = (g_Adc16ConversionValue_old >> 8);    		g_Adc16ConversionReturnValue_old;
@@ -392,9 +397,16 @@ static void task_50ms(void *pvParameters)
     		ADC16_SetChannelConfig(DEMO_ADC16_BASE, DEMO_ADC16_CHANNEL_GROUP, &adc16ChannelConfigStruct);
     		g_Adc16ConversionDoneFlag = false;
     	}
-
-        // Wait for the next cycle.
-        vTaskDelayUntil( &xLastWakeTime, (xFrequency*period2)/portTICK_PERIOD_MS);
+     	if ( period2 != 0)
+     	{
+			// Wait for the next cycle.
+			vTaskDelayUntil( &xLastWakeTime, (xFrequency*period2)/portTICK_PERIOD_MS);
+     	}
+     	else
+     	{
+			// Wait for the next cycle.
+			vTaskDelayUntil( &xLastWakeTime, (xFrequency/portTICK_PERIOD_MS);
+     	}
     }
 }
 

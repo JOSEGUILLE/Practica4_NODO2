@@ -34,7 +34,7 @@ static lin1d3_master_msg_T masterMsgTypefromID(uint8_t ID);
 /* variables */
 static lin1d3_master_msg_type_ID_T lin1d3_master_msg_type_ID_map[lin1d3_msg_num] = {{app_message_id_1_d, lin1d3_master_msg},\
 													{app_message_id_2_d,lin1d3_slave_msg },{app_message_id_2_d, lin1d3_master_msg}};
-static uint8_t ledValue = 1;
+static uint8_t ledValue = 0;
 static uint8_t ledValueSlave = 0;
 
 /******************************************************************************

@@ -405,7 +405,7 @@ static void task_50ms(void *pvParameters)
      	else
      	{
 			// Wait for the next cycle.
-			vTaskDelayUntil( &xLastWakeTime, (xFrequency/portTICK_PERIOD_MS);
+			vTaskDelayUntil( &xLastWakeTime, (xFrequency/portTICK_PERIOD_MS));
      	}
     }
 }
